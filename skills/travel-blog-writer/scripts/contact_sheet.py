@@ -8,7 +8,10 @@ W, H, cols = 360, 240, 5
 rows = (len(fs) + cols - 1) // cols
 sheet = Image.new("RGB", (cols * W, rows * (H + 20)), "white"); dr = ImageDraw.Draw(sheet)
 for i, f in enumerate(fs):
-    im = Image.open(os.path.join(d, f)).convert("RGB"); im.thumbnail((W, H))
+    try:
+        im = Image.open(os.path.join(d, f)).convert("RGB"); im.thumbnail((W, H))
+    except Exception:
+        print("깨진 파일 (지우고 다시 받으세요):", f); continue
     x, y = (i % cols) * W, (i // cols) * (H + 20)
     sheet.paste(im, (x, y + 20)); dr.text((x + 4, y + 4), f, fill="black")
 sheet.save(sys.argv[2])
